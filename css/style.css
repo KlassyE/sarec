@@ -260,16 +260,16 @@ p {
 }
 
 .logo-img {
-    height: 52px;
+    height: 78px;
     width: auto;
     display: block;
     flex-shrink: 0;
 }
 
 .footer-logo .logo-img {
-    height: 56px;
+    height: 84px;
     background: var(--white);
-    padding: 6px 10px;
+    padding: 8px 12px;
     border-radius: 8px;
 }
 
@@ -2316,6 +2316,9 @@ p {
    RESPONSIVE — MOBILE (max-width: 768px)
    ============================================ */
 @media (max-width: 768px) {
+    .logo-img { height: 60px; }
+    .footer-logo .logo-img { height: 70px; }
+
     .top-bar .container {
         flex-direction: column;
         gap: 5px;
