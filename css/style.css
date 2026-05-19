@@ -259,6 +259,20 @@ p {
     flex-shrink: 0;
 }
 
+.logo-img {
+    height: 52px;
+    width: auto;
+    display: block;
+    flex-shrink: 0;
+}
+
+.footer-logo .logo-img {
+    height: 56px;
+    background: var(--white);
+    padding: 6px 10px;
+    border-radius: 8px;
+}
+
 .logo-text h1 {
     font-size: 1.15rem;
     color: var(--primary-dark);
@@ -1179,6 +1193,19 @@ p {
     box-shadow: 0 2px 8px rgba(0,0,0,0.04);
 }
 
+.insurance-logo-box img {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+}
+
+.insurance-logo-box.on-dark {
+    background: #0a2540;
+    border-color: #0a2540;
+}
+
 .insurance-logo-box:hover {
     border-color: var(--primary-blue);
     box-shadow: var(--shadow-hover);
@@ -1196,17 +1223,51 @@ p {
    ============================================ */
 .page-banner {
     background: linear-gradient(135deg, var(--primary-dark), var(--primary-blue));
-    padding: 70px 0;
+    padding: 90px 0 70px;
     text-align: center;
+    position: relative;
+}
+
+.page-banner .container {
+    max-width: 820px;
 }
 
 .page-banner h1 {
     color: var(--white);
-    font-size: 2.4rem;
-    margin-bottom: 12px;
+    font-size: 2.6rem;
+    margin-bottom: 14px;
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 1.5px;
+    line-height: 1.15;
 }
+
+.page-banner .lead {
+    color: rgba(255, 255, 255, 0.92);
+    font-size: 1.05rem;
+    line-height: 1.6;
+    max-width: 680px;
+    margin: 0 auto 22px;
+}
+
+.page-banner .breadcrumb {
+    margin-bottom: 18px;
+    opacity: 0.85;
+}
+
+/* Hide icon containers that have been emptied during emoji cleanup */
+.icon:empty,
+.fci-icon:empty,
+.svc-thumb-icon:empty,
+.mv-icon:empty,
+.value-icon:empty,
+.thumb-icon:empty,
+.ins-icon:empty,
+.cat-icon:empty,
+.news-cat-icon:empty,
+.gallery-icon:empty,
+.comment-icon:empty,
+.alert-icon:empty,
+[class$="-icon"]:empty { display: none !important; }
 
 .breadcrumb {
     display: flex;
@@ -1541,6 +1602,30 @@ p {
     font-size: 2.5rem;
     color: var(--primary-blue);
     margin-bottom: 15px;
+}
+
+.insurance-card .ins-logo {
+    height: 70px;
+    width: 100%;
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--white);
+    border-radius: 6px;
+    padding: 6px;
+}
+
+.insurance-card .ins-logo img {
+    max-height: 100%;
+    max-width: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+}
+
+.insurance-card .ins-logo.on-dark {
+    background: #0a2540;
 }
 
 .insurance-card h3 {
