@@ -158,7 +158,6 @@ document.addEventListener('DOMContentLoaded', function () {
     var forms = document.querySelectorAll('form[data-validate]');
     forms.forEach(function (form) {
         form.addEventListener('submit', function (e) {
-            e.preventDefault();
             var isValid = true;
             var fields = form.querySelectorAll('[required]');
 
@@ -196,77 +195,46 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             });
 
-            if (isValid) {
-                var submitBtn = form.querySelector('button[type="submit"], input[type="submit"]');
-                var endpoint = form.getAttribute('data-endpoint');
-                var successMsg = form.querySelector('.form-success');
-                var errorMsg = form.querySelector('.form-error');
-                if (errorMsg) errorMsg.style.display = 'none';
+            if (!isValid) {
+                e.preventDefault();
+                return;
+            }
 
-                // ---- AJAX submission to a relay endpoint (e.g. FormSubmit.co) ----
-                if (endpoint && typeof fetch === 'function') {
-                    var originalLabel = submitBtn ? submitBtn.innerHTML : '';
-                    if (submitBtn) {
-                        submitBtn.disabled = true;
-                        submitBtn.innerHTML = 'Sending&hellip;';
-                    }
+            var submitBtn = form.querySelector('button[type="submit"], input[type="submit"]');
+            var successMsg = form.querySelector('.form-success');
+            var errorMsg = form.querySelector('.form-error');
+            if (errorMsg) errorMsg.style.display = 'none';
 
-                    var payload = {};
-                    form.querySelectorAll('input, select, textarea').forEach(function (el) {
-                        if (!el.name || el.type === 'submit' || el.type === 'button') return;
-                        payload[el.name] = (el.value || '').trim();
-                    });
-
-                    fetch(endpoint, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Accept': 'application/json'
-                        },
-                        body: JSON.stringify(payload)
-                    })
-                    .then(function (res) { return res.json().catch(function () { return {}; }); })
-                    .then(function (data) {
-                        var ok = data && (data.success === 'true' || data.success === true);
-                        if (ok) {
-                            if (successMsg) {
-                                successMsg.style.display = 'block';
-                                successMsg.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                            }
-                            form.reset();
-                            setTimeout(function () {
-                                if (successMsg) successMsg.style.display = 'none';
-                            }, 10000);
-                        } else {
-                            throw new Error('Endpoint did not confirm success');
-                        }
-                    })
-                    .catch(function () {
-                        if (errorMsg) {
-                            errorMsg.style.display = 'block';
-                            errorMsg.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                        }
-                    })
-                    .then(function () {
-                        if (submitBtn) {
-                            submitBtn.disabled = false;
-                            submitBtn.innerHTML = originalLabel;
-                        }
-                    });
-                    return;
+            // If form has a real action attribute, let the browser submit it
+            // natively (no CORS, no preflight). Just show "Sending…" state.
+            if (form.getAttribute('action')) {
+                if (submitBtn) {
+                    submitBtn.disabled = true;
+                    submitBtn.innerHTML = 'Sending&hellip;';
                 }
+                return; // browser performs the POST + redirect
+            }
 
-                // ---- Fallback: plain success message ----
-                if (successMsg) {
-                    successMsg.style.display = 'block';
-                    form.reset();
-                    setTimeout(function () {
-                        successMsg.style.display = 'none';
-                    }, 8000);
-                }
+            // ---- Fallback: no action, just show success message ----
+            e.preventDefault();
+            if (successMsg) {
+                successMsg.style.display = 'block';
+                form.reset();
+                setTimeout(function () {
+                    successMsg.style.display = 'none';
+                }, 8000);
             }
         });
     });
+
+    // ---- Show success banner after redirect-back (?sent=1) ----
+    if (window.location.search.indexOf('sent=1') !== -1) {
+        var sentBanner = document.querySelector('.form-success');
+        if (sentBanner) {
+            sentBanner.style.display = 'block';
+            sentBanner.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+    }
 
     // ---- Set Active Nav Link ----
     var currentPage = window.location.pathname.split('/').pop() || 'index.html';

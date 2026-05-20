@@ -49,10 +49,13 @@
         </div>
 
         <div class="appointment-form-container">
-            <form class="appointment-form" data-validate data-endpoint="https://formsubmit.co/ajax/info@sarecmedicare.com" novalidate>
+            <form class="appointment-form" data-validate
+                  action="https://formsubmit.co/info@sarecmedicare.com"
+                  method="POST" novalidate>
                 <input type="hidden" name="_subject" value="New Appointment Request — SAREC Medicare Centre">
                 <input type="hidden" name="_template" value="table">
                 <input type="hidden" name="_captcha" value="false">
+                <input type="hidden" name="_next" value="https://www.sarecmedicare.com/appointment.html?sent=1">
                 <!-- honeypot anti-spam: leave empty -->
                 <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off">
 
