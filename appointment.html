@@ -49,9 +49,18 @@
         </div>
 
         <div class="appointment-form-container">
-            <form class="appointment-form" data-validate data-mailto="info@sarecmedicare.com" data-mail-subject="New Appointment Request &mdash; SAREC Medicare Centre" novalidate>
+            <form class="appointment-form" data-validate data-endpoint="https://formsubmit.co/ajax/info@sarecmedicare.com" novalidate>
+                <input type="hidden" name="_subject" value="New Appointment Request — SAREC Medicare Centre">
+                <input type="hidden" name="_template" value="table">
+                <input type="hidden" name="_captcha" value="false">
+                <!-- honeypot anti-spam: leave empty -->
+                <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off">
+
                 <div class="form-success" style="display:none;padding:16px;background:#e8f5e9;border:1px solid #2e7d32;color:#1b5e20;border-radius:6px;margin-bottom:20px;">
-                    <strong>Thank you!</strong> Your email application has opened with your appointment details. Please press <em>Send</em> to deliver it to <a href="mailto:info@sarecmedicare.com">info@sarecmedicare.com</a>. Our team will confirm your booking within 2 hours during working hours.
+                    <strong>Thank you!</strong> Your appointment request has been sent to SAREC Medicare Centre. Our team will call you within 2 hours during working hours to confirm.
+                </div>
+                <div class="form-error" style="display:none;padding:16px;background:#fdecea;border:1px solid #c62828;color:#b71c1c;border-radius:6px;margin-bottom:20px;">
+                    <strong>Sorry &mdash;</strong> we couldn&rsquo;t send your request. Please call us directly at <a href="tel:+256700665522">0700-665522</a> or email <a href="mailto:info@sarecmedicare.com">info@sarecmedicare.com</a>.
                 </div>
                 <div class="form-row">
                     <div class="form-group">

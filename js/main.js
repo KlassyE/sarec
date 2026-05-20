@@ -197,37 +197,69 @@ document.addEventListener('DOMContentLoaded', function () {
             });
 
             if (isValid) {
-                // Compose a mailto: link from the form data if data-mailto is set
-                var mailTo = form.getAttribute('data-mailto');
-                if (mailTo) {
-                    var subject = form.getAttribute('data-mail-subject') || 'New message from sarecmedicare.com';
-                    var lines = [];
+                var submitBtn = form.querySelector('button[type="submit"], input[type="submit"]');
+                var endpoint = form.getAttribute('data-endpoint');
+                var successMsg = form.querySelector('.form-success');
+                var errorMsg = form.querySelector('.form-error');
+                if (errorMsg) errorMsg.style.display = 'none';
+
+                // ---- AJAX submission to a relay endpoint (e.g. FormSubmit.co) ----
+                if (endpoint && typeof fetch === 'function') {
+                    var originalLabel = submitBtn ? submitBtn.innerHTML : '';
+                    if (submitBtn) {
+                        submitBtn.disabled = true;
+                        submitBtn.innerHTML = 'Sending&hellip;';
+                    }
+
+                    var payload = {};
                     form.querySelectorAll('input, select, textarea').forEach(function (el) {
                         if (!el.name || el.type === 'submit' || el.type === 'button') return;
-                        var label = '';
-                        var labelEl = form.querySelector('label[for="' + el.id + '"]');
-                        if (labelEl) {
-                            label = labelEl.textContent.replace(/\*/g, '').trim();
-                        } else {
-                            label = el.name;
-                        }
-                        var val = (el.value || '').trim();
-                        lines.push(label + ': ' + (val || '(not provided)'));
+                        payload[el.name] = (el.value || '').trim();
                     });
-                    var body = 'Hello SAREC Medicare Centre,\n\nI would like to request the following appointment:\n\n'
-                        + lines.join('\n')
-                        + '\n\nKind regards.';
-                    var href = 'mailto:' + encodeURIComponent(mailTo)
-                        + '?subject=' + encodeURIComponent(subject)
-                        + '&body=' + encodeURIComponent(body);
-                    // Open user's email client
-                    window.location.href = href;
+
+                    fetch(endpoint, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json'
+                        },
+                        body: JSON.stringify(payload)
+                    })
+                    .then(function (res) { return res.json().catch(function () { return {}; }); })
+                    .then(function (data) {
+                        var ok = data && (data.success === 'true' || data.success === true);
+                        if (ok) {
+                            if (successMsg) {
+                                successMsg.style.display = 'block';
+                                successMsg.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                            }
+                            form.reset();
+                            setTimeout(function () {
+                                if (successMsg) successMsg.style.display = 'none';
+                            }, 10000);
+                        } else {
+                            throw new Error('Endpoint did not confirm success');
+                        }
+                    })
+                    .catch(function () {
+                        if (errorMsg) {
+                            errorMsg.style.display = 'block';
+                            errorMsg.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        }
+                    })
+                    .then(function () {
+                        if (submitBtn) {
+                            submitBtn.disabled = false;
+                            submitBtn.innerHTML = originalLabel;
+                        }
+                    });
+                    return;
                 }
 
-                var successMsg = form.querySelector('.form-success');
+                // ---- Fallback: plain success message ----
                 if (successMsg) {
                     successMsg.style.display = 'block';
-                    if (!mailTo) form.reset();
+                    form.reset();
                     setTimeout(function () {
                         successMsg.style.display = 'none';
                     }, 8000);
