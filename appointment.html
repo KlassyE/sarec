@@ -49,7 +49,10 @@
         </div>
 
         <div class="appointment-form-container">
-            <form class="appointment-form" data-validate>
+            <form class="appointment-form" data-validate data-mailto="info@sarecmedicare.com" data-mail-subject="New Appointment Request &mdash; SAREC Medicare Centre" novalidate>
+                <div class="form-success" style="display:none;padding:16px;background:#e8f5e9;border:1px solid #2e7d32;color:#1b5e20;border-radius:6px;margin-bottom:20px;">
+                    <strong>Thank you!</strong> Your email application has opened with your appointment details. Please press <em>Send</em> to deliver it to <a href="mailto:info@sarecmedicare.com">info@sarecmedicare.com</a>. Our team will confirm your booking within 2 hours during working hours.
+                </div>
                 <div class="form-row">
                     <div class="form-group">
                         <label for="patientName">Full Name <span class="req">*</span></label>

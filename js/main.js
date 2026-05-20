@@ -197,13 +197,40 @@ document.addEventListener('DOMContentLoaded', function () {
             });
 
             if (isValid) {
+                // Compose a mailto: link from the form data if data-mailto is set
+                var mailTo = form.getAttribute('data-mailto');
+                if (mailTo) {
+                    var subject = form.getAttribute('data-mail-subject') || 'New message from sarecmedicare.com';
+                    var lines = [];
+                    form.querySelectorAll('input, select, textarea').forEach(function (el) {
+                        if (!el.name || el.type === 'submit' || el.type === 'button') return;
+                        var label = '';
+                        var labelEl = form.querySelector('label[for="' + el.id + '"]');
+                        if (labelEl) {
+                            label = labelEl.textContent.replace(/\*/g, '').trim();
+                        } else {
+                            label = el.name;
+                        }
+                        var val = (el.value || '').trim();
+                        lines.push(label + ': ' + (val || '(not provided)'));
+                    });
+                    var body = 'Hello SAREC Medicare Centre,\n\nI would like to request the following appointment:\n\n'
+                        + lines.join('\n')
+                        + '\n\nKind regards.';
+                    var href = 'mailto:' + encodeURIComponent(mailTo)
+                        + '?subject=' + encodeURIComponent(subject)
+                        + '&body=' + encodeURIComponent(body);
+                    // Open user's email client
+                    window.location.href = href;
+                }
+
                 var successMsg = form.querySelector('.form-success');
                 if (successMsg) {
                     successMsg.style.display = 'block';
-                    form.reset();
+                    if (!mailTo) form.reset();
                     setTimeout(function () {
                         successMsg.style.display = 'none';
-                    }, 5000);
+                    }, 8000);
                 }
             }
         });
