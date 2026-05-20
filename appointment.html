@@ -50,14 +50,14 @@
 
         <div class="appointment-form-container">
             <form class="appointment-form" data-validate
-                  action="https://formsubmit.co/info@sarecmedicare.com"
+                  action="https://api.web3forms.com/submit"
                   method="POST" novalidate>
-                <input type="hidden" name="_subject" value="New Appointment Request — SAREC Medicare Centre">
-                <input type="hidden" name="_template" value="table">
-                <input type="hidden" name="_captcha" value="false">
-                <input type="hidden" name="_next" value="https://www.sarecmedicare.com/appointment.html?sent=1">
+                <input type="hidden" name="access_key" value="54064648-f18c-45f1-becd-2294f5ad6e82">
+                <input type="hidden" name="subject" value="New Appointment Request — SAREC Medicare Centre">
+                <input type="hidden" name="from_name" value="SAREC Medicare Website">
+                <input type="hidden" name="redirect" value="https://www.sarecmedicare.com/appointment.html?sent=1">
                 <!-- honeypot anti-spam: leave empty -->
-                <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off">
+                <input type="checkbox" name="botcheck" style="display:none" tabindex="-1">
 
                 <div class="form-success" style="display:none;padding:16px;background:#e8f5e9;border:1px solid #2e7d32;color:#1b5e20;border-radius:6px;margin-bottom:20px;">
                     <strong>Thank you!</strong> Your appointment request has been sent to SAREC Medicare Centre. Our team will call you within 2 hours during working hours to confirm.
